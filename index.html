@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>IndexedDB: Almacenamiento local con HTML5</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="indexedDB.js"></script>
 </head>
 <body onload="startDB();">
+    <div class="container">
+            <input type="text" id="dni" placeholder="Introducir dni"><br><br>
+            <input type="text" id="name" placeholder="Introducir nombre"><br><br>
+            <input type="text" id="surname" placeholder="Introducir apellidos"><br><br>
+            <button type="button" onclick="add()";>Guardar</button>
+    </div>
     
 </body>
 </html>
