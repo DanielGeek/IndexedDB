@@ -11,10 +11,61 @@
 </head>
 <body onload="startDB();">
     <div class="container">
-            <input type="text" id="dni" placeholder="Introducir dni"><br><br>
-            <input type="text" id="name" placeholder="Introducir nombre"><br><br>
-            <input type="text" id="surname" placeholder="Introducir apellidos"><br><br>
-            <button type="button" onclick="add()";>Guardar</button>
+            <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">@</span>
+                    </div>
+                    <input type="text" id="dni" class="form-control" placeholder="Introducir dni" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">@</span>
+                    </div>
+                    <input type="text" id="name" class="form-control" placeholder="Introducir nombre" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">@</span>
+                    </div>
+                    <input type="text" id="surname" class="form-control" placeholder="Introducir apellidos" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+
+            
+            <button type="button" class="btn btn-dark" onclick="add()";>Guardar</button>
+            <hr>
+
+            <div id="elements">
+                <table class="table table-hover">
+                    <caption>Persons</caption>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>DNI</th>
+                        <th>Name</th>
+                        <th>Last Name</th>
+                      </tr>
+                    </thead>
+                    <tbody id="elementsList">
+                      <tr>
+                        <!-- <th scope="row">1</th> -->
+                        <td>Not elements to show</td>
+                        <!-- <td>Otto</td>
+                        <td>@mdo</td> -->
+                      </tr>
+                      <!-- <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                      </tr> -->
+                      <!-- <tr>
+                        <th scope="row">3</th>
+                        <td colspan="2">Larry the Bird</td>
+                        <td>@twitter</td>
+                      </tr> -->
+                    </tbody>
+                  </table>
+            </div>
     </div>
     
 </body>

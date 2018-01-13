@@ -10,9 +10,10 @@ var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
             
             //crear bd
             dataBase = indexedDB.open("myabakus");
-            console.log(dataBase)
+            console.log(dataBase);
+
             dataBase.onupgradeneeded = function (e) {
-               
+                //recuperar la conexión activa a nuestra base de datos
                 active = dataBase.result;
 
                 //crear almacen people con llave id
@@ -25,7 +26,8 @@ var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
 
             //si carga correctamente la bd ejecutar un alert
             dataBase.onsuccess = function (e) {
-                alert('Base de datos cargada correctamente');
+               console.log('Base de datos cargada correctamente');
+               loadAll();
             };
 
             //si no carga correctamente la bd ejecutar un alert
@@ -66,6 +68,55 @@ var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
                 document.querySelector("#name").value = '';
                 document.querySelector("#surname").value = '';
                 alert('Objeto agregado correctamente');
-            }
-
+                loadAll();
+            };
         }
+
+        // función  loadAll para recuperar los objetos de nuestra BD IndexedDB
+        function loadAll() {
+
+            var active = dataBase.result;
+            var data = active.transaction(["people"], "readonly");
+            var object = data.objectStore("people");
+
+            var elements = [];
+
+            //recorrer almacen
+            object.openCursor().onsuccess = function (e) {
+                
+                //recuperamos el objeto
+                var result = e.target.result;
+
+                if(result === null) {
+                    return;
+                }
+                
+                elements.push(result.value);
+                result.continue();
+                
+            };
+
+            data.oncomplete = function() {
+                
+                var outerHTML = '';
+
+                for(var key in elements) {
+
+                    outerHTML += '\n\
+                    <tr>\n\
+                         <th scope="row">'+elements[key].id+'</th>\n\
+                        <td>' + elements[key].dni + '</td>\n\
+                        <td>' + elements[key].name + '</td>\n\
+                        <td>\n\
+                            <button type="button" onclick="load('+ elements[key].id + ')">Details</button>\n\
+                        </td>\n\
+                        </tr>';
+                }
+
+                elements = [];
+                document.querySelector("#elementsList").innerHTML = outerHTML;
+            };
+        }
+
+        
+
