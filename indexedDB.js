@@ -20,7 +20,7 @@ var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
                 object = active.createObjectStore("people", { keyPath : 'id', autoIncrement : true });
 
                 //crear indices byname, by_dni
-                object.createIndex('byname', 'name', { unique : false });
+                object.createIndex('by_name', 'name', { unique : false });
                 object.createIndex('by_dni', 'dni', { unique : true });
             };
 
@@ -72,6 +72,45 @@ var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
             };
         }
 
+        function load(id) {
+            var active = dataBase.result;
+            var data = active.transaction(["people"], "readonly");
+            var object = data.objectStore("people");
+
+            //obtener la data por id
+            var request = object.get(parseInt(id));
+
+            request.onsuccess = function () {
+                var result = request.result;
+
+                if(result !== undefined) {
+                    alert("ID: " + result.id + "\n\
+                        DNI " + result.dni + "\n\
+                        Name: " + result.name + "\n\
+                        Suname: " + result.surname);
+                }
+            };
+        }
+
+        function loadByDni(dni) {
+            var active = dataBase.result;
+            var data = active.transaction(["people"], "readonly");
+            var object = data.objectStore("people");
+            var index = object.index("by_dni");
+            var request = index.get(String(dni));
+
+            request.onsuccess = function () {
+                var result = request.result;
+
+                if (result !== undefined) {
+                    alert("ID: "+ result.id + "\n\
+                    DNI "+ result.dni + "\n\
+                    Name: " + result.name + "\n\
+                    Surname: "+ result.surname);
+                }
+            };
+        }
+
         // función  loadAll para recuperar los objetos de nuestra BD IndexedDB
         function loadAll() {
 
@@ -108,8 +147,53 @@ var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
                         <td>' + elements[key].dni + '</td>\n\
                         <td>' + elements[key].name + '</td>\n\
                         <td>\n\
-                            <button type="button" onclick="load('+ elements[key].id + ')">Details</button>\n\
+                            <button type="button" class="btn btn-info" onclick="load('+ elements[key].id + ')">Details</button>\n\
                         </td>\n\
+                        <button type="button" class="btn btn-info" onclick="loadByDni(' + elements[key].dni + ')">Details DNI</button>\n\
+                        </tr>';
+                }
+
+                elements = [];
+                document.querySelector("#elementsList").innerHTML = outerHTML;
+            };
+        }
+
+        function loadAllByName() {
+
+            var active = dataBase.result;
+            var data = active.transaction(["people"], "readonly");
+            var object = data.objectStore("people");
+            var index = object.index("byname");
+
+            var elements = [];
+
+            index.openCursor().onsuccess = function (e) {
+
+                var result = e.target.result;
+
+                if(result === null) {
+                    return;
+                }
+
+                elements.push(result.value);
+                result.continue();
+            };
+
+            data.oncomplete = function () {
+
+                var outerHTML = '';
+
+                for(var key in elements) {
+                    
+                    outerHTML += '\n\
+                    <tr>\n\
+                         <th scope="row">'+elements[key].id+'</th>\n\
+                        <td>' + elements[key].dni + '</td>\n\
+                        <td>' + elements[key].name + '</td>\n\
+                        <td>\n\
+                            <button type="button" class="btn btn-info" onclick="load('+ elements[key].id + ')">Details</button>\n\
+                        </td>\n\
+                        <button type="button" class="btn btn-info" onclick="loadByDni(' + elements[key].dni + ')">Details DNI</button>\n\
                         </tr>';
                 }
 
